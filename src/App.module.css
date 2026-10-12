@@ -1,5 +1,4 @@
-.setup { min-height: 100vh; display: grid; justify-items: center; align-content: center; gap: 15px; padding: 28px; background: var(--paper); color: var(--ink); text-align: center; }
-.mark { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; background: var(--brand); color: var(--gold); font-family: Georgia, serif; font-size: 25px; }
-.setup > p { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .16em; }
-.setup h1 { max-width: 660px; color: var(--brand); font-family: Georgia, serif; font-size: clamp(38px, 7vw, 64px); font-weight: 500; line-height: 1.05; }
-.setup > span:last-child { color: var(--muted); font-size: 16px; }
+.app { min-height: 100vh; display: flex; flex-direction: column; background: var(--paper); }
+.main { flex: 1; padding-top: 74px; }
+:global(body.dialog-open) { overflow: hidden; }
+@media (max-width: 700px) { .main { padding-top: 68px; } }

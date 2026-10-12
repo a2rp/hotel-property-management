@@ -5,7 +5,8 @@ import styles from "./styles.module.css";
 const Dialog = ({ title, description, onClose, children, size = "medium" }) => {
   const panelRef = useRef(null);
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+
+  useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
 
   useEffect(() => {
     const panel = panelRef.current;
