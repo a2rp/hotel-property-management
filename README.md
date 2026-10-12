@@ -4,6 +4,8 @@
 
 A frontend-only hotel property management demo for guest reservations, room readiness, check-in, and checkout workflows.
 
+**Live demo:** [a2rp.github.io/hotel-property-management](https://a2rp.github.io/hotel-property-management/)
+
 ## Pages
 
 - **Desk** at `/overview` shows arrivals, departures, occupancy, and room readiness.
