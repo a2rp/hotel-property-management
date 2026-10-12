@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { FiArrowRight, FiCalendar, FiCheck, FiClock, FiLogIn, FiLogOut, FiMoon, FiUsers } from "react-icons/fi";
 import styles from "./styles.module.css";
 
-const today = new Date().toISOString().slice(0, 10);
+const currentDate = new Date();
+const today = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
 
 const Overview = ({ rooms, reservations, onCheckIn, onCheckOut, onSetRoomStatus }) => {
   const [view, setView] = useState("Arrivals");

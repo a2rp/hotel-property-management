@@ -5,7 +5,8 @@ import Dialog from "../../components/dialog";
 import ConfirmDialog from "../../components/confirmDialog";
 import styles from "./styles.module.css";
 
-const today = new Date().toISOString().slice(0, 10);
+const currentDate = new Date();
+const today = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
 const emptyForm = { guest: "", email: "", roomType: "King", guests: "2", arrival: today, departure: "", note: "" };
 const displayDate = (value) => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(`${value}T12:00:00Z`));
 

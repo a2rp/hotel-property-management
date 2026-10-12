@@ -6,7 +6,8 @@ import AppRoutes from "./AppRoutes";
 import { initialReservations, initialRooms } from "./data/seed";
 import styles from "./App.module.css";
 
-const today = new Date().toISOString().slice(0, 10);
+const currentDate = new Date();
+const today = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
 
 const App = () => {
   const [rooms, setRooms] = useState(initialRooms);
