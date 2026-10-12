@@ -1,0 +1,9 @@
+.notice { display: flex; gap: 10px; align-items: center; padding: 12px; border-radius: 11px; background: #f8eee6; color: #77513d; }
+.notice svg { flex: 0 0 auto; width: 19px; height: 19px; color: var(--warning); }
+.notice p { font-size: 14px; }
+.actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+.actions button { min-height: 42px; padding: 9px 15px; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; font-weight: 700; transition: border-color .18s ease, background .18s ease, color .18s ease; }
+.cancel { background: var(--surface); color: var(--ink); }
+.cancel:hover { background: var(--paper); }
+.danger { border-color: #a94d41 !important; background: #a94d41; color: white; }
+.danger:hover { border-color: #8b3b32 !important; background: #8b3b32; }
