@@ -11,6 +11,7 @@ export const initialRooms = [
   { id: "302", floor: 3, type: "Suite", status: "Occupied", note: "Guest requested extra towels" },
   { id: "303", floor: 3, type: "Queen", status: "Ready", note: "Mountain view" },
   { id: "304", floor: 3, type: "King", status: "Ready", note: "Quiet wing" },
+  { id: "305", floor: 3, type: "Suite", status: "Ready", note: "Fireplace suite" },
 ];
 
 export const initialReservations = [

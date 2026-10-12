@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FiCalendar, FiGrid, FiGithub, FiMenu, FiPlus, FiX } from "react-icons/fi";
+import { FiCalendar, FiGrid, FiGithub, FiHome, FiMenu, FiPlus, FiX } from "react-icons/fi";
 import styles from "./styles.module.css";
 
 const navigation = [
   { to: "/overview", label: "Desk", icon: FiGrid },
   { to: "/reservations", label: "Reservations", icon: FiCalendar },
-  { to: "/rooms", label: "Rooms", icon: FiGrid },
+  { to: "/rooms", label: "Rooms", icon: FiHome },
 ];
 
 const Header = () => {

@@ -15,7 +15,7 @@ const Reservations = ({ reservations, onSave, onDelete, onCheckIn, onCheckOut, n
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All stays");
-  const [sort, setSort] = useState("asc");
+  const [sort, setSort] = useState("desc");
   const [dialog, setDialog] = useState(() => new URLSearchParams(location.search).get("create") === "1" ? { type: "form", reservation: null } : null);
   const [form, setForm] = useState(() => ({ ...emptyForm, arrival: today }));
   const [errors, setErrors] = useState({});
@@ -72,7 +72,7 @@ const Reservations = ({ reservations, onSave, onDelete, onCheckIn, onCheckOut, n
           {filtered.map((item) => <article className={styles.row} key={item.id}>
             <div className={styles.guestCell}><button type="button" className={styles.guestName} onClick={() => setDialog({ type: "details", reservation: item })}>{item.guest}<FiChevronRight aria-hidden="true" /></button><span>{item.id} <i>·</i> {item.email}</span></div>
             <div className={styles.dateCell}><strong>{displayDate(item.arrival)}</strong><span>to {displayDate(item.departure)}</span></div>
-            <div className={styles.roomCell}><strong>Room {item.room}</strong><span>{item.roomType} · {item.guests} guests</span></div>
+            <div className={styles.roomCell}><strong>Room {item.room}</strong><span>{item.roomType} · {item.guests} {item.guests === 1 ? "guest" : "guests"}</span></div>
             <div><span className={`${styles.status} ${styles[statusClass(item.status)]}`}>{item.status}</span></div>
             <div className={styles.actions}>
               {item.status === "Confirmed" && <button type="button" className={styles.checkAction} onClick={() => onCheckIn(item.id)}>Check in</button>}
@@ -90,7 +90,7 @@ const Reservations = ({ reservations, onSave, onDelete, onCheckIn, onCheckOut, n
         <form className={styles.form} onSubmit={submit} noValidate>
           <label className={styles.field}>Guest name<input value={form.guest} onChange={(event) => setForm({ ...form, guest: event.target.value })} placeholder="e.g. Jordan Lee" aria-invalid={!!errors.guest} />{errors.guest && <span>{errors.guest}</span>}</label>
           <label className={styles.field}>Email address<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="guest@example.com" aria-invalid={!!errors.email} />{errors.email && <span>{errors.email}</span>}</label>
-          <label className={styles.field}>Room type<select value={form.roomType} onChange={(event) => setForm({ ...form, roomType: event.target.value })}><option>King</option><option>Queen</option><option>Suite</option></select></label>
+          <label className={styles.field}>Room type<select disabled={!!dialog.reservation && dialog.reservation.status !== "Confirmed"} value={form.roomType} onChange={(event) => setForm({ ...form, roomType: event.target.value })}><option>King</option><option>Queen</option><option>Suite</option></select></label>
           <label className={styles.field}>Guests<select value={form.guests} onChange={(event) => setForm({ ...form, guests: event.target.value })}>{[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n} {n === 1 ? "guest" : "guests"}</option>)}</select>{errors.guests && <span>{errors.guests}</span>}</label>
           <label className={styles.field}>Arrival<input type="date" value={form.arrival} onChange={(event) => setForm({ ...form, arrival: event.target.value })} aria-invalid={!!errors.arrival} />{errors.arrival && <span>{errors.arrival}</span>}</label>
           <label className={styles.field}>Departure<input type="date" min={form.arrival} value={form.departure} onChange={(event) => setForm({ ...form, departure: event.target.value })} aria-invalid={!!errors.departure} />{errors.departure && <span>{errors.departure}</span>}</label>
@@ -100,7 +100,7 @@ const Reservations = ({ reservations, onSave, onDelete, onCheckIn, onCheckOut, n
       </Dialog>}
 
       {dialog?.type === "details" && <Dialog title={dialog.reservation.guest} description={`Reservation ${dialog.reservation.id}`} onClose={closeDialog}>
-        <div className={styles.detailGrid}><div><FiMail aria-hidden="true" /><span>Email<strong>{dialog.reservation.email}</strong></span></div><div><FiCalendar aria-hidden="true" /><span>Stay dates<strong>{displayDate(dialog.reservation.arrival)} to {displayDate(dialog.reservation.departure)}</strong></span></div><div><FiUsers aria-hidden="true" /><span>Room and guests<strong>{dialog.reservation.roomType} room {dialog.reservation.room} · {dialog.reservation.guests} guests</strong></span></div><div><FiClock aria-hidden="true" /><span>Stay status<strong>{dialog.reservation.status}</strong></span></div></div>
+        <div className={styles.detailGrid}><div><FiMail aria-hidden="true" /><span>Email<strong>{dialog.reservation.email}</strong></span></div><div><FiCalendar aria-hidden="true" /><span>Stay dates<strong>{displayDate(dialog.reservation.arrival)} to {displayDate(dialog.reservation.departure)}</strong></span></div><div><FiUsers aria-hidden="true" /><span>Room and guests<strong>{dialog.reservation.roomType} room {dialog.reservation.room} · {dialog.reservation.guests} {dialog.reservation.guests === 1 ? "guest" : "guests"}</strong></span></div><div><FiClock aria-hidden="true" /><span>Stay status<strong>{dialog.reservation.status}</strong></span></div></div>
         {dialog.reservation.note && <p className={styles.note}><strong>Team note</strong>{dialog.reservation.note}</p>}
         <div className={styles.detailActions}><button type="button" className={styles.secondary} onClick={() => openEdit(dialog.reservation)}><FiEdit2 aria-hidden="true" /> Edit stay</button>{dialog.reservation.status === "Confirmed" && <button type="button" className={styles.primary} onClick={() => { onCheckIn(dialog.reservation.id); closeDialog(); }}>Check in</button>}{dialog.reservation.status === "Checked in" && <button type="button" className={styles.primary} onClick={() => { onCheckOut(dialog.reservation.id); closeDialog(); }}>Check out</button>}</div>
       </Dialog>}
