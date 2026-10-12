@@ -4,13 +4,15 @@ import styles from "./styles.module.css";
 
 const Dialog = ({ title, description, onClose, children, size = "medium" }) => {
   const panelRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     const panel = panelRef.current;
     const target = panel?.querySelector("[data-dialog-initial], input, select, textarea, button");
     target?.focus();
     const onKeyDown = (event) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") onCloseRef.current();
       if (event.key === "Tab" && panel) {
         const focusable = [...panel.querySelectorAll('button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href]')];
         if (!focusable.length) return;
@@ -23,7 +25,7 @@ const Dialog = ({ title, description, onClose, children, size = "medium" }) => {
     document.addEventListener("keydown", onKeyDown);
     document.body.classList.add("dialog-open");
     return () => { document.removeEventListener("keydown", onKeyDown); document.body.classList.remove("dialog-open"); };
-  }, [onClose]);
+  }, []);
 
   return (
     <div className={styles.backdrop} role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
