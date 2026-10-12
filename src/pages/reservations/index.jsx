@@ -32,6 +32,11 @@ const Reservations = ({ reservations, onSave, onDelete, onCheckIn, onCheckOut, n
     if (new URLSearchParams(location.search).get("create") === "1") navigate(location.pathname, { replace: true });
   };
 
+  const updateForm = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }));
+    setErrors((current) => Object.fromEntries(Object.entries(current).filter(([name]) => name !== field)));
+  };
+
   const openCreate = () => { setForm({ ...emptyForm, arrival: today }); setErrors({}); setDialog({ type: "form", reservation: null }); };
   const openEdit = (reservation) => { setForm({ guest: reservation.guest, email: reservation.email, roomType: reservation.roomType, guests: String(reservation.guests), arrival: reservation.arrival, departure: reservation.departure, note: reservation.note || "" }); setErrors({}); setDialog({ type: "form", reservation }); };
   const filtered = useMemo(() => reservations.filter((item) => {
@@ -88,13 +93,13 @@ const Reservations = ({ reservations, onSave, onDelete, onCheckIn, onCheckOut, n
 
       {dialog?.type === "form" && <Dialog title={dialog.reservation ? "Edit reservation" : "Plan a stay"} description="A few details help the team prepare a warm welcome." onClose={closeDialog} size="large">
         <form className={styles.form} onSubmit={submit} noValidate>
-          <label className={styles.field}>Guest name<input value={form.guest} onChange={(event) => setForm({ ...form, guest: event.target.value })} placeholder="e.g. Jordan Lee" aria-invalid={!!errors.guest} />{errors.guest && <span>{errors.guest}</span>}</label>
-          <label className={styles.field}>Email address<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="guest@example.com" aria-invalid={!!errors.email} />{errors.email && <span>{errors.email}</span>}</label>
-          <label className={styles.field}>Room type<select disabled={!!dialog.reservation && dialog.reservation.status !== "Confirmed"} value={form.roomType} onChange={(event) => setForm({ ...form, roomType: event.target.value })}><option>King</option><option>Queen</option><option>Suite</option></select></label>
-          <label className={styles.field}>Guests<select value={form.guests} onChange={(event) => setForm({ ...form, guests: event.target.value })}>{[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n} {n === 1 ? "guest" : "guests"}</option>)}</select>{errors.guests && <span>{errors.guests}</span>}</label>
-          <label className={styles.field}>Arrival<input type="date" value={form.arrival} onChange={(event) => setForm({ ...form, arrival: event.target.value })} aria-invalid={!!errors.arrival} />{errors.arrival && <span>{errors.arrival}</span>}</label>
-          <label className={styles.field}>Departure<input type="date" min={form.arrival} value={form.departure} onChange={(event) => setForm({ ...form, departure: event.target.value })} aria-invalid={!!errors.departure} />{errors.departure && <span>{errors.departure}</span>}</label>
-          <label className={`${styles.field} ${styles.fullField}`}>Notes for the team<textarea rows="3" maxLength="180" value={form.note} onChange={(event) => setForm({ ...form, note: event.target.value })} placeholder="Arrival details or guest preferences" /><small>{form.note.length}/180</small></label>
+          <label className={styles.field}>Guest name<input value={form.guest} onChange={(event) => updateForm("guest", event.target.value)} placeholder="e.g. Jordan Lee" aria-invalid={!!errors.guest} />{errors.guest && <span>{errors.guest}</span>}</label>
+          <label className={styles.field}>Email address<input type="email" value={form.email} onChange={(event) => updateForm("email", event.target.value)} placeholder="guest@example.com" aria-invalid={!!errors.email} />{errors.email && <span>{errors.email}</span>}</label>
+          <label className={styles.field}>Room type<select disabled={!!dialog.reservation && dialog.reservation.status !== "Confirmed"} value={form.roomType} onChange={(event) => updateForm("roomType", event.target.value)}><option>King</option><option>Queen</option><option>Suite</option></select></label>
+          <label className={styles.field}>Guests<select value={form.guests} onChange={(event) => updateForm("guests", event.target.value)}>{[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n} {n === 1 ? "guest" : "guests"}</option>)}</select>{errors.guests && <span>{errors.guests}</span>}</label>
+          <label className={styles.field}>Arrival<input type="date" value={form.arrival} onChange={(event) => updateForm("arrival", event.target.value)} aria-invalid={!!errors.arrival} />{errors.arrival && <span>{errors.arrival}</span>}</label>
+          <label className={styles.field}>Departure<input type="date" min={form.arrival} value={form.departure} onChange={(event) => updateForm("departure", event.target.value)} aria-invalid={!!errors.departure} />{errors.departure && <span>{errors.departure}</span>}</label>
+          <label className={`${styles.field} ${styles.fullField}`}>Notes for the team<textarea rows="3" maxLength="180" value={form.note} onChange={(event) => updateForm("note", event.target.value)} placeholder="Arrival details or guest preferences" /><small>{form.note.length}/180</small></label>
           <div className={styles.formFoot}><p>Room assignment depends on current room readiness.</p><div><button type="button" className={styles.secondary} onClick={closeDialog}>Cancel</button><button type="submit" className={styles.primary}><FiPlus aria-hidden="true" /> {dialog.reservation ? "Save changes" : "Create reservation"}</button></div></div>
         </form>
       </Dialog>}
