@@ -9,10 +9,12 @@ const navigation = [
   { to: "/rooms", label: "Rooms", icon: FiHome },
 ];
 
-const Header = () => {
+const Header = ({ roomCount }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const previousScroll = useRef(0);
+  const firstNavLinkRef = useRef(null);
+  const menuButtonRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +28,25 @@ const Header = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+
+    const onKeyDown = (event) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButtonRef.current?.focus();
+    };
+
+    firstNavLinkRef.current?.focus();
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+    menuButtonRef.current?.focus();
+  };
+
   const openNewReservation = () => {
     setMenuOpen(false);
     navigate("/reservations?create=1");
@@ -34,16 +55,16 @@ const Header = () => {
   return (
     <header className={[styles.header, hidden && styles.hidden, menuOpen && styles.menuOpen].filter(Boolean).join(" ")}>
       <div className={styles.inner}>
-        <NavLink className={styles.brand} to="/overview" aria-label="Maison North hotel desk" onClick={() => setMenuOpen(false)}>
+        <NavLink className={styles.brand} to="/overview" aria-label="Maison North hotel desk" onClick={closeMenu}>
           <span className={styles.brandMark} aria-hidden="true"><i /><i /><i /></span>
           <span className={styles.brandText}>Maison North<small>HOTEL DESK</small></span>
         </NavLink>
 
-        <span className={styles.property}>ASHEVILLE <i /> 48 ROOMS</span>
+        <span className={styles.property}>ASHEVILLE <i /> {roomCount} ROOMS</span>
 
         <nav className={[styles.navigation, menuOpen && styles.navigationOpen].filter(Boolean).join(" ")} aria-label="Main navigation" id="hotel-navigation">
           {navigation.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} className={({ isActive }) => [styles.navLink, isActive && styles.active].filter(Boolean).join(" ")} onClick={() => setMenuOpen(false)}>
+            <NavLink ref={label === "Desk" ? firstNavLinkRef : undefined} key={to} to={to} className={({ isActive }) => [styles.navLink, isActive && styles.active].filter(Boolean).join(" ")} onClick={closeMenu}>
               <Icon aria-hidden="true" /><span>{label}</span>
             </NavLink>
           ))}
@@ -56,7 +77,7 @@ const Header = () => {
           <button className={styles.newBooking} type="button" onClick={openNewReservation} aria-label="New reservation">
             <FiPlus aria-hidden="true" /><span>New reservation</span>
           </button>
-          <button className={styles.menuButton} type="button" aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={menuOpen} aria-controls="hotel-navigation" onClick={() => setMenuOpen((open) => !open)}>
+          <button ref={menuButtonRef} className={styles.menuButton} type="button" aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={menuOpen} aria-controls="hotel-navigation" onClick={() => setMenuOpen((open) => !open)}>
             {menuOpen ? <FiX aria-hidden="true" /> : <FiMenu aria-hidden="true" />}
           </button>
         </div>

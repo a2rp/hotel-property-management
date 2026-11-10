@@ -10,7 +10,10 @@ const Dialog = ({ title, description, onClose, children, size = "medium" }) => {
 
   useEffect(() => {
     const panel = panelRef.current;
-    const target = panel?.querySelector("[data-dialog-initial], input, select, textarea, button");
+    const previouslyFocused = document.activeElement;
+    const target = panel?.querySelector("[data-dialog-initial]")
+      || panel?.querySelector("input:not(:disabled), select:not(:disabled), textarea:not(:disabled)")
+      || panel?.querySelector("button:not(:disabled)");
     target?.focus();
     const onKeyDown = (event) => {
       if (event.key === "Escape") onCloseRef.current();
@@ -25,7 +28,15 @@ const Dialog = ({ title, description, onClose, children, size = "medium" }) => {
     };
     document.addEventListener("keydown", onKeyDown);
     document.body.classList.add("dialog-open");
-    return () => { document.removeEventListener("keydown", onKeyDown); document.body.classList.remove("dialog-open"); };
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("dialog-open");
+      if (previouslyFocused instanceof HTMLElement && previouslyFocused.isConnected) {
+        previouslyFocused.focus();
+      } else {
+        document.querySelector("#main-content button")?.focus();
+      }
+    };
   }, []);
 
   return (

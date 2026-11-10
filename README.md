@@ -32,7 +32,7 @@ The deploy script builds the Vite app, copies `dist/index.html` to `dist/404.htm
 
 ## Screenshots
 
-These captures show the current production build and its primary routes and dialogs.
+These static captures illustrate the primary routes and dialogs. Date-sensitive demo content updates relative to the current day.
 
 ### Pages
 

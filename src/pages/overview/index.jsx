@@ -26,7 +26,7 @@ const Overview = ({ rooms, reservations, onCheckIn, onCheckOut, onSetRoomStatus 
     <div className={styles.page}>
       <section className={styles.hero}>
         <div><p className={styles.date}>{dateLabel} <span>•</span> Asheville, NC</p><h1>Make every arrival feel easy.</h1><p className={styles.intro}>Your desk for the day: guest plans, room readiness, and the details that make a stay feel considered.</p></div>
-        <div className={styles.heroAside}><span className={styles.openLabel}><i /> DESK OPEN</span><p>48 <span>guest rooms</span></p><Link to="/reservations">View reservations <FiArrowRight aria-hidden="true" /></Link></div>
+        <div className={styles.heroAside}><span className={styles.openLabel}><i /> DESK OPEN</span><p>{rooms.length} <span>tracked rooms</span></p><Link to="/reservations">View reservations <FiArrowRight aria-hidden="true" /></Link></div>
       </section>
 
       <section className={styles.metrics} aria-label="Today's hotel overview">

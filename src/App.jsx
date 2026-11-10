@@ -35,6 +35,7 @@ const App = () => {
     const reservation = reservations.find((item) => item.id === reservationId);
     if (!reservation || reservation.status !== "Confirmed") return false;
     if (reservation.arrival > today) { notify("info", `Check-in for ${reservation.guest} opens on the arrival date.`); return false; }
+    if (reservation.departure <= today) { notify("error", `The departure date for ${reservation.guest}'s stay has passed. Update the reservation dates first.`); return false; }
     const room = rooms.find((item) => item.id === reservation.room);
     if (!room || room.status !== "Ready") { notify("error", `Room ${reservation.room} is not ready for check-in yet.`); return false; }
     setReservations((current) => current.map((item) => item.id === reservationId ? { ...item, status: "Checked in" } : item));
@@ -48,7 +49,7 @@ const App = () => {
     if (!reservation || reservation.status !== "Checked in") return false;
     setReservations((current) => current.map((item) => item.id === reservationId ? { ...item, status: "Checked out" } : item));
     setRooms((current) => current.map((item) => item.id === reservation.room ? { ...item, status: "Needs cleaning" } : item));
-    notify("success", `${reservation.guest} checked out. Room ${reservation.room} is ready for turnover.`);
+    notify("success", `${reservation.guest} checked out. Room ${reservation.room} needs cleaning before the next stay.`);
     return true;
   };
 
@@ -85,7 +86,7 @@ const App = () => {
 
   return (
     <div className={styles.app}>
-      <Header />
+      <Header roomCount={rooms.length} />
       <main id="main-content" className={styles.main}><AppRoutes {...pageProps} /></main>
       <Footer />
       <Toast items={notifications} onDismiss={dismissToast} />
