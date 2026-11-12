@@ -24,7 +24,6 @@ Run checks and deploy to GitHub Pages with:
 
 ```bash
 npm run lint
-npm run build
 npm run deploy
 ```
 

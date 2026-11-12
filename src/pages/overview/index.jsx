@@ -35,7 +35,7 @@ const Overview = ({ rooms, reservations, onCheckIn, onCheckOut, onSetRoomStatus 
 
       <div className={styles.workGrid}>
         <section className={styles.agenda}>
-          <div className={styles.sectionHead}><div><h2>Guest movement</h2><p>Keep the day flowing from arrival through checkout.</p></div><div className={styles.tabs} role="tablist" aria-label="Guest movement view">{["Arrivals", "Departures"].map((item) => <button key={item} role="tab" aria-selected={view === item} className={view === item ? styles.selected : ""} type="button" onClick={() => setView(item)}>{item}</button>)}</div></div>
+          <div className={styles.sectionHead}><div><h2>Guest movement</h2><p>Keep the day flowing from arrival through checkout.</p></div><div className={styles.tabs} role="group" aria-label="Guest movement view">{["Arrivals", "Departures"].map((item) => <button key={item} aria-pressed={view === item} className={view === item ? styles.selected : ""} type="button" onClick={() => setView(item)}>{item}</button>)}</div></div>
           {stays.length ? <div className={styles.stayList}>{stays.map((stay, index) => <article className={styles.stay} key={stay.id}>
             <div className={styles.time}><span>{view === "Arrivals" ? `${3 + index}:00 PM` : "11:00 AM"}</span><i /></div>
             <div className={styles.guest}><div className={styles.avatar}>{stay.guest.split(" ").map((part) => part[0]).join("")}</div><div><h3>{stay.guest}</h3><p>{stay.roomType} room <span>·</span> Room {stay.room} <span>·</span> {stay.guests} guests</p><small>{stay.note}</small></div></div>
